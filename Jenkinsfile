@@ -43,7 +43,7 @@ pipeline{
                         echo 'post test with variable: fail'
                         exit 1
                     fi
-		''''
+		'''
 	
 			}		
 		}
