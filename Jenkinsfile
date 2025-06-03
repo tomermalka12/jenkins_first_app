@@ -1,4 +1,9 @@
 pipeline{
+	parameters {
+		string(name: 'sleep_time', defaultValue: '2', description: 'Time to sleep')
+		choice(name: 'system_type', choices: ['debian', 'redhat'], description: 'Type of build')
+	}
+	agent ${parame.system_type}
 	agent any
 	stages{
 		stage('pre-Build'){
@@ -20,12 +25,13 @@ pipeline{
 
 		stage('build'){
 			steps{
-				sh '''                   
+				sh """                   
 					python3 app.py &
 					chmod 777 /home/jenkins/.local/bin/pyinstaller
-						/home/jenkins/.local/bin/pyinstaller  app.py
-				'''
-				archiveArtifacts artifacts: 'dist', followSymlinks: false
+					/home/jenkins/.local/bin/pyinstaller  app.py
+					sleep ${sleep_time}
+				"""
+				// archiveArtifacts artifacts: 'dist', followSymlinks: false
 			}		
 		}
 	
@@ -49,7 +55,7 @@ pipeline{
 			}		
 		}
 	}
-}
+}	
 
 
 
